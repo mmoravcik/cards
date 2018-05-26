@@ -9,3 +9,7 @@ Look at playground.py for some examples and inspirations of what can be
 achieved by using this package
 
 `python playground.py`
+
+## Test
+
+`pytest`
