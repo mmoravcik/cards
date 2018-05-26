@@ -1,6 +1,6 @@
 import random
-import constants
-import exceptions
+from . import constants
+from . import exceptions
 
 
 class Card(object):
@@ -96,7 +96,7 @@ class StandardDeck(object):
         self.cards = []
         for suit in constants.CARD_SUITS_CONF.keys():
             for value in constants.CARD_VALUES_CONF.keys():
-                for _ in xrange(0, self.EACH_CARD_OCCURS):
+                for _ in range(0, self.EACH_CARD_OCCURS):
                     self.cards.append(Card(value, suit))
 
     def shuffle(self):
@@ -124,7 +124,7 @@ class StandardDeck(object):
             raise exceptions.NotEnoughCardsException()
 
         picked_cards = list()
-        for _ in xrange(0, number_of_cards):
+        for _ in range(0, number_of_cards):
             picked_cards.append(self.cards.pop(random.randrange(len(self.cards))))
         return picked_cards
 
@@ -187,7 +187,7 @@ class StandardDeck(object):
         ```
         """
         success_runs = 0
-        for _ in xrange(0, iteration_count):
+        for _ in range(0, iteration_count):
             if test_func(**kwargs):
                 success_runs += 1
         return StandardDeck._get_percentage(success_runs, iteration_count)

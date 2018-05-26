@@ -1,7 +1,6 @@
 import pytest
-import random
 
-from ..cards import StandardDeck, JokerDeck, Card
+from ..cards.models import StandardDeck, Card
 
 from ..cards import constants
 from ..cards import exceptions
@@ -14,7 +13,7 @@ def test_shuffle_deck():
     sample_size = 10
 
     assert StandardDeck.NUMBER_OF_CARDS == len(another_deck.cards) == len(deck.cards)
-    for i in xrange(0, sample_size):
+    for i in range(0, sample_size):
         assert str(deck.cards[i]) == str(another_deck.cards[i])
 
     another_deck.shuffle()
@@ -23,7 +22,7 @@ def test_shuffle_deck():
     assert StandardDeck.NUMBER_OF_CARDS == len(deck.cards) == len(another_deck.cards)
 
     matching_cards = 0
-    for i in xrange(0, sample_size):
+    for i in range(0, sample_size):
         if str(deck.cards[i]) == str(another_deck.cards[i]):
             matching_cards += 1
 

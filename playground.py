@@ -1,5 +1,5 @@
-from cards import StandardDeck, JokerDeck, Card
-import constants
+from cards.models import StandardDeck, JokerDeck, Card
+from cards import constants
 
 
 def test_high_card_is_selected():
@@ -14,7 +14,7 @@ def test_high_card_is_selected():
 
 
 result = StandardDeck.run_probability_test(test_high_card_is_selected)
-print 'High card has been picked in {}% cases'.format(result)
+print('High card has been picked in {}% cases'.format(result))
 
 
 def test_same_card_is_turned_face_up():
@@ -23,14 +23,14 @@ def test_same_card_is_turned_face_up():
     deck.shuffle()
     deck1.shuffle()
 
-    for i in xrange(0, 52):
+    for i in range(0, 52):
         if str(deck.cards[i]) == str(deck1.cards[i]):
             return True
     return False
 
 
 result = StandardDeck.run_probability_test(test_same_card_is_turned_face_up)
-print 'Same card has been discovered in {}% cases'.format(result)
+print('Same card has been discovered in {}% cases'.format(result))
 
 
 def pick_red_card():
@@ -45,7 +45,7 @@ def pick_red_card():
 
 # We expect this to be close to 50%
 result = StandardDeck.run_probability_test(pick_red_card)
-print 'Chance of a black card is {}%'.format(result)
+print('Chance of a black card is {}%'.format(result))
 
 
 def probability_of_cutting_a_joker(how_many_jokers_do_i_want):
@@ -80,7 +80,7 @@ def probability_of_cutting_a_joker(how_many_jokers_do_i_want):
 
 
 result = StandardDeck.run_probability_test(probability_of_cutting_a_joker, how_many_jokers_do_i_want=1)
-print 'Probability of getting at least 1 joker is {}%'.format(result)
+print('Probability of getting at least 1 joker is {}%'.format(result))
 
 result = StandardDeck.run_probability_test(probability_of_cutting_a_joker, how_many_jokers_do_i_want=2)
-print 'Probability of getting at least 2 jokers is {}%'.format(result)
+print('Probability of getting at least 2 jokers is {}%'.format(result))

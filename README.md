@@ -1,7 +1,7 @@
 # Cards
 
 ## Installation
-1. create and activate new python 2.7 environment
+1. create and activate new python 3.x environment
 2. `pip install -r requirements.txt`
 
 ## Usage

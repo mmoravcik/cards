@@ -1,10 +1,6 @@
-import pytest
 import random
 
-from ..cards import StandardDeck, JokerDeck, Card
-
-from ..cards import constants
-from ..cards import exceptions
+from ..cards.models import StandardDeck
 
 
 def test_probability_calculator():

@@ -1,10 +1,5 @@
-import pytest
-import random
-
-from ..cards import StandardDeck, JokerDeck, Card
-
+from ..cards.models import Card
 from ..cards import constants
-from ..cards import exceptions
 
 
 def test_card_colour():
