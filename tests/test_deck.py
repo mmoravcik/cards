@@ -58,6 +58,21 @@ def test_pick_random_cards():
         deck.pick_random_cards(StandardDeck.NUMBER_OF_CARDS + 1)
 
 
+def test_pick_card():
+    deck = StandardDeck()
+    card = Card(13, suit=constants.SUIT_CLUBS)
+
+    assert StandardDeck.NUMBER_OF_CARDS == len(deck.cards)
+    card = deck.pick_card(card)
+    assert card.suit == constants.SUIT_CLUBS
+    assert card.value == 13
+    assert StandardDeck.NUMBER_OF_CARDS - 1 == len(deck.cards)
+
+    # we can't pick the card again as it doesn't exist in the deck
+    with pytest.raises(exceptions.CardIsNotInTheDeck):
+        deck.pick_card(card)
+
+
 def test_card_occurrence_count():
     deck = StandardDeck()
     picked_card = deck.pick_random_card()

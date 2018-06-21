@@ -23,6 +23,15 @@ class Card(object):
     def value_symbol(self):
         return constants.CARD_VALUES_CONF[self.value]['symbol']
 
+    def is_the_same_card(self, card):
+        """
+        Compare self.card with card and see if they are the same, e.g. they have
+        the same suit and value
+        :param card: <Card>
+        :return: <bool>
+        """
+        return self.suit == card.suit and self.value == card.value
+
     def __str__(self):
         return "{}{}".format(
             self.value_symbol,
@@ -85,7 +94,7 @@ class StandardDeck(object):
         """
         occurrences = 0
         for existing_card in self.cards:
-            if existing_card.suit == card.suit and existing_card.value == card.value:
+            if existing_card.is_the_same_card(card):
                 occurrences += 1
         return occurrences
 
@@ -128,6 +137,19 @@ class StandardDeck(object):
             picked_cards.append(self.cards.pop(random.randrange(len(self.cards))))
         return picked_cards
 
+    def pick_card(self, card):
+        """
+        Pick and remove specific card from the deck
+        :param card: <Card>
+        :return: <Card>
+        """
+        if self.card_occurrence_count(card) == 0:
+            raise exceptions.CardIsNotInTheDeck()
+
+        for idx, existing_card in enumerate(self.cards):
+            if existing_card.is_the_same_card(card):
+                return self.cards.pop(idx)
+
     def insert_card(self, card, force=False):
         """
         Insert a card to a deck, but make sure it is not duplicated and deck
@@ -161,7 +183,7 @@ class StandardDeck(object):
         return (float(success_count) / float(iterations)) * 100
 
     @staticmethod
-    def run_probability_test(test_func, iteration_count=10000, **kwargs):
+    def run_probability_test(test_func, iteration_count=1000, **kwargs):
         """
         Run test_func over `iteration_count` times and return the probability
         in percent of the event happening
@@ -194,6 +216,10 @@ class StandardDeck(object):
 
 
 class JokerDeck(StandardDeck):
+    """"
+    Joker deck is a regular deck included twice.
+    TODO Add an actual joker card support
+    """
     NUMBER_OF_CARDS = 104
     EACH_CARD_OCCURS = 2
     cards = None

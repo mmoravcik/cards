@@ -1,3 +1,5 @@
+import random
+
 from cards.models import StandardDeck, JokerDeck, Card
 from cards import constants
 
@@ -56,8 +58,9 @@ def probability_of_cutting_a_joker(how_many_jokers_do_i_want):
 
     # We need to insert 4 extra cards, as we need 4 jokers for this test
     # Lets pretend king of spades is our joker :)
-    # Lets add 2 more Kings of spades so we have 4 of them total in the pack
+    # HACK Lets add 2 more Kings of spades so we have 4 of them total in the pack
     # And then add 2 more random card, so we have 108 total cards
+    # TODO add an actual joker card support
     king_of_spades = Card(13, constants.SUIT_SPADES)
 
     deck.insert_card(king_of_spades, force=True)
@@ -74,7 +77,7 @@ def probability_of_cutting_a_joker(how_many_jokers_do_i_want):
 
     jokers = 0
     for card in cards:
-        if card.value == 13 and card.suit == constants.SUIT_SPADES:
+        if king_of_spades.is_the_same_card(card):
             jokers += 1
     return jokers >= how_many_jokers_do_i_want
 

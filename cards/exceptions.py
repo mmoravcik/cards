@@ -8,3 +8,7 @@ class NotEnoughCardsException(Exception):
 
 class IncorrectDeckException(Exception):
     pass
+
+
+class CardIsNotInTheDeck(Exception):
+    pass
