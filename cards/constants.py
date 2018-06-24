@@ -66,3 +66,6 @@ CARD_SUITS_CONF = {
         'symbol': 'D'
     },
 }
+
+JOKER_VALUE = '*'
+JOKER_SUIT = '*'

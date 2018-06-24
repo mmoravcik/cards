@@ -13,15 +13,28 @@ class Card(object):
 
     @property
     def colour(self):
+        if self.is_joker:
+            return '*'
         return constants.CARD_SUITS_CONF[self.suit]['colour']
 
     @property
     def suit_symbol(self):
+        if self.is_joker:
+            return '*'
         return constants.CARD_SUITS_CONF[self.suit]['symbol']
 
     @property
     def value_symbol(self):
+        if self.is_joker:
+            return '*'
         return constants.CARD_VALUES_CONF[self.value]['symbol']
+
+    @property
+    def is_joker(self):
+        return all([
+            self.value == constants.JOKER_VALUE,
+            self.suit == constants.JOKER_SUIT,
+        ])
 
     def is_the_same_card(self, card):
         """
@@ -35,7 +48,7 @@ class Card(object):
     def __str__(self):
         return "{}{}".format(
             self.value_symbol,
-            self.suit_symbol
+            self.suit_symbol,
         )
 
     def __repr__(self):
@@ -43,8 +56,9 @@ class Card(object):
 
 
 class StandardDeck(object):
-    NUMBER_OF_CARDS = 52
-    EACH_CARD_OCCURS = 1
+    NUMBER_OF_NON_JOKER_CARDS = 52
+    EACH_NON_JOKER_CARD_OCCURS = 1
+    NUMBER_OF_JOKERS = 0
     cards = None
 
     def __init__(self):
@@ -57,7 +71,7 @@ class StandardDeck(object):
         Is this deck full?
         :return: <bool>
         """
-        return len(self.cards) == self.NUMBER_OF_CARDS
+        return len(self.cards) == self.NUMBER_OF_NON_JOKER_CARDS + self.NUMBER_OF_JOKERS
 
     @property
     def is_over_filled(self):
@@ -65,7 +79,7 @@ class StandardDeck(object):
         Is this deck overfilled?
         :return: <bool>
         """
-        return len(self.cards) > self.NUMBER_OF_CARDS
+        return len(self.cards) > self.NUMBER_OF_NON_JOKER_CARDS + self.NUMBER_OF_JOKERS
 
     @property
     def is_full_or_overfilled(self):
@@ -82,7 +96,7 @@ class StandardDeck(object):
 
         for suit in constants.CARD_SUITS_CONF.keys():
             for value in constants.CARD_VALUES_CONF.keys():
-                if self.card_occurrence_count(Card(value, suit)) != self.EACH_CARD_OCCURS:
+                if self.card_occurrence_count(Card(value, suit)) != self.EACH_NON_JOKER_CARD_OCCURS:
                     return False
         return True
 
@@ -103,10 +117,13 @@ class StandardDeck(object):
         Reset the deck so it contains all cards in suit / value order
         """
         self.cards = []
-        for suit in constants.CARD_SUITS_CONF.keys():
-            for value in constants.CARD_VALUES_CONF.keys():
-                for _ in range(0, self.EACH_CARD_OCCURS):
+        for _ in range(0, self.EACH_NON_JOKER_CARD_OCCURS):
+            for suit in constants.CARD_SUITS_CONF.keys():
+                for value in constants.CARD_VALUES_CONF.keys():
                     self.cards.append(Card(value, suit))
+
+        for _ in range(0, self.NUMBER_OF_JOKERS):
+            self.cards.append(Card(constants.JOKER_VALUE, constants.JOKER_SUIT))
 
     def shuffle(self):
         """
@@ -163,7 +180,10 @@ class StandardDeck(object):
 
         if not force:
             occurrences = self.card_occurrence_count(card)
-            if occurrences > self.EACH_CARD_OCCURS - 1:
+            if any([
+                card.is_joker and occurrences > self.NUMBER_OF_JOKERS - 1,
+                not card.is_joker and occurrences > self.EACH_NON_JOKER_CARD_OCCURS - 1,
+            ]):
                 raise exceptions.IncorrectDeckException(
                     "Card `{}` is already in the pack {} time(s)".format(
                         str(card), occurrences
@@ -215,11 +235,15 @@ class StandardDeck(object):
         return StandardDeck._get_percentage(success_runs, iteration_count)
 
 
+class StandardDeckWithJokers(StandardDeck):
+    NUMBER_OF_NON_JOKER_CARDS = 52
+    NUMBER_OF_JOKERS = 2
+
+
 class JokerDeck(StandardDeck):
     """"
     Joker deck is a regular deck included twice.
-    TODO Add an actual joker card support
     """
-    NUMBER_OF_CARDS = 104
-    EACH_CARD_OCCURS = 2
-    cards = None
+    NUMBER_OF_NON_JOKER_CARDS = 104
+    EACH_NON_JOKER_CARD_OCCURS = 2
+    NUMBER_OF_JOKERS = 4
