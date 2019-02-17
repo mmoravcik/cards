@@ -38,7 +38,7 @@ print('Same card has been discovered in {}% cases'.format(result))
 
 def pick_red_card():
     """
-    What is the chance that we will pick up a black card from deck
+    What is the chance that we will pick up a red card from deck
     of cars?
     """
     deck = StandardDeck()
@@ -138,15 +138,14 @@ def probability_of_winning_a_price_in_3_card_problem():
     Is it to your advantage to switch your choice?'
     '
 
-    For our test, the joker is a winning card, and 2 queen of hearts are not
-    winning cards
+    For our test, the joker is a winning card, and 2 queen of hearts are goats
     """
     deck = EmptyDeck()
     joker = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
-    non_winning_card = Card(12, constants.SUIT_HEARTS)
+    goat = Card(12, constants.SUIT_HEARTS)
     deck.insert_card(joker, force=True)
-    deck.insert_card(non_winning_card, force=True)
-    deck.insert_card(non_winning_card, force=True)
+    deck.insert_card(goat, force=True)
+    deck.insert_card(goat, force=True)
     deck.shuffle()
     assert len(deck.cards) == 3
 
