@@ -1,6 +1,7 @@
 import random
 
-from cards.models import StandardDeck, JokerDeck, Card
+from cards.constants import COLOUR_BLACK
+from cards.models import StandardDeck, JokerDeck, Card, EmptyDeck
 from cards import constants
 
 
@@ -47,7 +48,7 @@ def pick_red_card():
 
 # We expect this to be close to 50%
 result = StandardDeck.run_probability_test(pick_red_card)
-print('Chance of a black card is {}%'.format(result))
+print('Chance of a red card is {}%'.format(result))
 
 
 def probability_of_cutting_a_joker(how_many_jokers_do_i_want):
@@ -69,10 +70,10 @@ def probability_of_cutting_a_joker(how_many_jokers_do_i_want):
     return jokers >= how_many_jokers_do_i_want
 
 
-result = StandardDeck.run_probability_test(probability_of_cutting_a_joker, how_many_jokers_do_i_want=1)
+result = JokerDeck.run_probability_test(probability_of_cutting_a_joker, how_many_jokers_do_i_want=1)
 print('Probability of getting at least 1 joker is {}%'.format(result))
 
-result = StandardDeck.run_probability_test(probability_of_cutting_a_joker, how_many_jokers_do_i_want=2)
+result = JokerDeck.run_probability_test(probability_of_cutting_a_joker, how_many_jokers_do_i_want=2)
 print('Probability of getting at least 2 jokers is {}%'.format(result))
 
 
@@ -120,5 +121,95 @@ def exploding_kittens_dying_in_the_first_round():
             return True
 
 
-result = StandardDeck.run_probability_test(exploding_kittens_dying_in_the_first_round, iteration_count=20000)
+result = StandardDeck.run_probability_test(exploding_kittens_dying_in_the_first_round)
 print('Probability of dying in the first round of Exploding kittens is {}%'.format(result))
+
+
+def probability_of_winning_a_price_in_3_card_problem():
+    """
+    What is the 3 'card' problem?
+    It is a adaptation of a Monty Hall problem:
+    '
+    Suppose you're on a game show, and you're given the choice of three doors:
+    Behind one door is a car; behind the others, goats.
+    You pick a door, say No. 1, and the host, who knows what's behind the doors,
+    opens another door, say No. 3, which has a goat.
+    He then says to you, "Do you want to pick door No. 2?"
+    Is it to your advantage to switch your choice?'
+    '
+
+    For our test, the joker is a winning card, and 2 queen of hearts are not
+    winning cards
+    """
+    deck = EmptyDeck()
+    joker = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
+    non_winning_card = Card(12, constants.SUIT_HEARTS)
+    deck.insert_card(joker, force=True)
+    deck.insert_card(non_winning_card, force=True)
+    deck.insert_card(non_winning_card, force=True)
+    deck.shuffle()
+    assert len(deck.cards) == 3
+
+    random_cards = deck.pick_random_cards(3)
+
+    # host knows which card is a joker
+    for idx, card in enumerate(random_cards):
+        if card.is_joker:
+            joker_index = idx
+
+    # Spectator always selects the first card first
+    chosen_card = random_cards[0]
+
+    # The presenter knows which card is not winning, so player
+    # can switch to the other card
+    if joker_index in [1, 2]:
+        chosen_card = random_cards[joker_index]
+
+    if joker_index == 0:
+        chosen_card = random_cards[1]
+
+    return chosen_card.is_joker
+
+
+result = EmptyDeck.run_probability_test(probability_of_winning_a_price_in_3_card_problem)
+print('Probability picking the winning card is {}%'.format(result))
+
+
+def probability_of_all_dealt_cards_are_red_in_joker():
+    deck = JokerDeck()
+    dealt_cards = deck.pick_random_cards(14)
+    for card in dealt_cards:
+        if card.colour == COLOUR_BLACK:
+            return False
+    return True
+
+
+result = JokerDeck.run_probability_test(probability_of_all_dealt_cards_are_red_in_joker)
+print('Probability of all cards being red is {}%'.format(result))
+
+
+def probability_of_flush_in_poker():
+    deck = StandardDeck()
+    dealt_cards = deck.pick_random_cards(5)
+    suit_to_match = dealt_cards[0].suit
+    for card in dealt_cards:
+        if card.suit != suit_to_match:
+            return False
+    return True
+
+
+result = StandardDeck.run_probability_test(probability_of_flush_in_poker)
+print('Probability of a flush in poker {}%'.format(result))
+
+
+def probability_of_straight_in_poker():
+    deck = StandardDeck()
+    dealt_cards = sorted(deck.pick_random_cards(5), key=lambda x: x.value)
+    for idx, card in enumerate(dealt_cards[1:]):
+        if card.value - 1 != dealt_cards[idx].value:
+            return False
+    return True
+
+
+result = StandardDeck.run_probability_test(probability_of_straight_in_poker)
+print('Probability of a straight in poker {}%'.format(result))

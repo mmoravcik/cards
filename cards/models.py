@@ -1,4 +1,5 @@
 import random
+
 from . import constants
 from . import exceptions
 
@@ -228,11 +229,11 @@ class StandardDeck(object):
         print 'Chance of a red card is {}%'.format(result)
         ```
         """
-        success_runs = 0
+        successful_runs = 0
         for _ in range(0, iteration_count):
             if test_func(**kwargs):
-                success_runs += 1
-        return StandardDeck._get_percentage(success_runs, iteration_count)
+                successful_runs += 1
+        return StandardDeck._get_percentage(successful_runs, iteration_count)
 
 
 class StandardDeckWithJokers(StandardDeck):
@@ -247,3 +248,12 @@ class JokerDeck(StandardDeck):
     NUMBER_OF_NON_JOKER_CARDS = 104
     EACH_NON_JOKER_CARD_OCCURS = 2
     NUMBER_OF_JOKERS = 4
+
+
+class EmptyDeck(StandardDeck):
+    """"
+    Deck with no cards
+    """
+    NUMBER_OF_NON_JOKER_CARDS = 0
+    EACH_NON_JOKER_CARD_OCCURS = 0
+    NUMBER_OF_JOKERS = 0
