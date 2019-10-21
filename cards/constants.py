@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 COLOUR_RED = 'red'
 COLOUR_BLACK = 'black'
 
@@ -51,19 +52,19 @@ CARD_VALUES_CONF = {
 CARD_SUITS_CONF = {
     SUIT_SPADES: {
         'colour': COLOUR_BLACK,
-        'symbol': 'S'
+        'symbol': '♠'
     },
     SUIT_HEARTS: {
         'colour': COLOUR_RED,
-        'symbol': 'H'
+        'symbol': '♥'
     },
     SUIT_CLUBS: {
         'colour': COLOUR_BLACK,
-        'symbol': 'C'
+        'symbol': '♣'
     },
     SUIT_DIAMONDS: {
         'colour': COLOUR_RED,
-        'symbol': 'D'
+        'symbol': '♦'
     },
 }
 

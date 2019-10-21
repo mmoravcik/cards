@@ -204,7 +204,7 @@ class StandardDeck(object):
         return (float(success_count) / float(iterations)) * 100
 
     @staticmethod
-    def run_probability_test(test_func, iteration_count=1000, **kwargs):
+    def run_probability_test(test_func, iteration_count=10000, **kwargs):
         """
         Run test_func over `iteration_count` times and return the probability
         in percent of the event happening
@@ -234,6 +234,51 @@ class StandardDeck(object):
             if test_func(**kwargs):
                 successful_runs += 1
         return StandardDeck._get_percentage(successful_runs, iteration_count)
+
+
+class ProbabilityTest(object):
+    @staticmethod
+    def _get_percentage(success_count, iterations):
+        """
+        Just a silly helper function to help calculate the percentage value.
+        :param success_count: <int> Number of times desired event happened
+        :param iterations: <int> Number of times we've tried
+        :return: <float> Percentage of success_count of iterations
+        """
+        return (float(success_count) / float(iterations)) * 100
+
+    @staticmethod
+    def run_probability_test(test_func, result_sequence, iteration_count=20000, **kwargs):
+        """
+        Run test_func over `iteration_count` times and return the probability
+        in percent of the event happening
+        :param test_func: <function>
+        :param result_sequence: <int> which sequence returns the final Bool?
+        :param iteration_count: <int> how many iterations?
+        :return: <float> Percentage of chance of test happening
+
+        Example usage:
+
+        ```
+        def test_func(optional_argument):
+            '''
+            What is the chance that we will pick up a red card from the deck
+            of cars?
+            '''
+            deck = StandardDeck()
+            card = deck.pick_random_card()
+            return card.colour == COLOUR_RED
+
+        # We expect this to be close to 50%
+        result = StandardDeck.run_probability_test(test_func, optional_argument=foo)
+        print 'Chance of a red card is {}%'.format(result)
+        ```
+        """
+        successful_runs = 0
+        for _ in range(0, iteration_count):
+            if test_func(**kwargs)[result_sequence]:
+                successful_runs += 1
+        return ProbabilityTest._get_percentage(successful_runs, iteration_count)
 
 
 class StandardDeckWithJokers(StandardDeck):

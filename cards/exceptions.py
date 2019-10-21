@@ -12,3 +12,11 @@ class IncorrectDeckException(Exception):
 
 class CardIsNotInTheDeck(Exception):
     pass
+
+
+class UnsupportedAction(Exception):
+    pass
+
+
+class UnsupportedCommand(Exception):
+    pass

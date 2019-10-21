@@ -212,3 +212,15 @@ def probability_of_straight_in_poker():
 
 result = StandardDeck.run_probability_test(probability_of_straight_in_poker)
 print('Probability of a straight in poker {}%'.format(result))
+
+
+def probability_of_picking_ace_of_hearths():
+    deck = StandardDeck()
+    picked = deck.pick_random_card()
+    if picked.value == 1 and picked.suit == constants.SUIT_HEARTS:
+        return True
+    return False
+
+
+result = StandardDeck.run_probability_test(probability_of_picking_ace_of_hearths)
+print('Probability of picking an ACE OF HEARTHS is {}%'.format(result))
