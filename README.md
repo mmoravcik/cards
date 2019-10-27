@@ -5,10 +5,8 @@
 2. `pip install -r requirements.txt`
 
 ## Usage
-Look at playground.py for some examples and inspirations of what can be
+Look at test/test_integration.py or test/test_language.py for some examples and inspirations of what can be
 achieved by using this package
-
-`python playground.py`
 
 ## Test
 

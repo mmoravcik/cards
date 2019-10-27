@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ..cards.models import Card
 from ..cards import constants
 
@@ -21,16 +22,16 @@ def test_card_colour():
 
 def test_pretty_card():
     card = Card(3, constants.SUIT_SPADES)
-    assert str(card) == '3S'
+    assert str(card) == '3♠'
 
     card = Card(10, constants.SUIT_CLUBS)
-    assert str(card) == '10C'
+    assert str(card) == '10♣'
 
     card = Card(13, constants.SUIT_HEARTS)
-    assert str(card) == 'KH'
+    assert str(card) == 'K♥'
 
     card = Card(1, constants.SUIT_DIAMONDS)
-    assert str(card) == 'AD'
+    assert str(card) == 'A♦'
 
     card = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
     assert str(card) == '**'
