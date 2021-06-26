@@ -138,14 +138,14 @@ def test_exploding_kittens_dying_in_the_first_round():
         # now lets pick defuse from player 1 and at the same time that player
         # will pick up an exploding kitten
         card = player_1_cards.pop(random.randrange(len(player_1_cards)))
-        if defuse.is_the_same_card(card):
+        if defuse == card:
             # After picking defuse from player 1, player 2 now picks up
             # non-exploding kitten card
             deck.pick_card(Card(value=10, suit=constants.SUIT_HEARTS))
             # Player 1, now without defuse, is picking up the card, hoping it is
             # not an Exploding kitten
             second_card = deck.pick_random_card()
-            if second_card.is_the_same_card(exploding_kitten):
+            if second_card == exploding_kitten:
                 return True
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)

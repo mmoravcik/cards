@@ -1,16 +1,14 @@
 import random
+from dataclasses import dataclass
 
 from . import constants
 from . import exceptions
 
 
-class Card(object):
-    value = None
-    suit = None
-
-    def __init__(self, value, suit):
-        self.suit = suit
-        self.value = value
+@dataclass
+class Card:
+    value: int
+    suit: str
 
     @property
     def colour(self):
@@ -36,15 +34,6 @@ class Card(object):
             self.value == constants.JOKER_VALUE,
             self.suit == constants.JOKER_SUIT,
         ])
-
-    def is_the_same_card(self, card):
-        """
-        Compare self.card with card and see if they are the same, e.g. they have
-        the same suit and value
-        :param card: <Card>
-        :return: <bool>
-        """
-        return self.suit == card.suit and self.value == card.value
 
     def __str__(self):
         return "{}{}".format(
@@ -109,7 +98,7 @@ class StandardDeck(object):
         """
         occurrences = 0
         for existing_card in self.cards:
-            if existing_card.is_the_same_card(card):
+            if existing_card == card:
                 occurrences += 1
         return occurrences
 
@@ -165,7 +154,7 @@ class StandardDeck(object):
             raise exceptions.CardIsNotInTheDeck()
 
         for idx, existing_card in enumerate(self.cards):
-            if existing_card.is_the_same_card(card):
+            if existing_card == card:
                 return self.cards.pop(idx)
 
     def insert_card(self, card, force=False):

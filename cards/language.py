@@ -66,7 +66,7 @@ class Language(object):
                     elif condition["type"] == "specific_cards":
                         for specific_card in condition["values"]:
                             _card = Card(value=specific_card["value"], suit=specific_card["suit"])
-                            if card.is_the_same_card(_card):
+                            if card == _card:
                                 matches += 1
                     elif condition["type"] == "suits":
                         if card.suit in condition["values"]:

@@ -47,12 +47,12 @@ def test_is_the_same_card():
     card6 = Card(3, constants.SUIT_SPADES)
     card7 = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
 
-    assert card1.is_the_same_card(card2) is False
-    assert card1.is_the_same_card(card3) is False
-    assert card1.is_the_same_card(card4) is False
-    assert card1.is_the_same_card(card5) is False
-    assert card1.is_the_same_card(card6) is True
-    assert card1.is_the_same_card(card7) is False
+    assert card1 != card2
+    assert card1 != card3
+    assert card1 != card4
+    assert card1 != card5
+    assert card1 == card6
+    assert card1 != card7
 
 
 def test_joker_card():
