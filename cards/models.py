@@ -1,5 +1,4 @@
 import random
-from copy import copy, deepcopy
 
 from . import constants
 from . import exceptions
@@ -187,11 +186,10 @@ class StandardDeck(object):
                 not card.is_joker and occurrences > self.EACH_NON_JOKER_CARD_OCCURS - 1,
             ]):
                 raise exceptions.IncorrectDeckException(
-                    "Card `{}` is already in the pack {} time(s)".format(
+                    "Card `{}` is already in the deck {} time(s)".format(
                         str(card), occurrences
                     )
                 )
-
         self.cards.append(card)
 
 

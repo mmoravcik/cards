@@ -1,3 +1,5 @@
+import pytest
+
 from ..cards.constants import (
     SUIT_HEARTS,
     SUIT_DIAMONDS,
@@ -9,6 +11,8 @@ from ..cards.language import Language
 from ..cards.models import ProbabilityTest
 
 ITERATION_COUNT = 15000
+
+pytestmark = pytest.mark.slow
 
 
 def test_red_card_probability():

@@ -1,5 +1,7 @@
 import random
 
+import pytest
+
 from ..cards.constants import COLOUR_BLACK
 from ..cards.models import (
     StandardDeck,
@@ -11,6 +13,8 @@ from ..cards.models import (
 from ..cards import constants
 
 ITERATION_COUNT = 15000
+
+pytestmark = pytest.mark.slow
 
 
 def test_high_card_is_selected():
@@ -200,7 +204,7 @@ def test_probability_of_winning_a_price_in_3_card_problem():
     print('Probability picking the winning card is {}%'.format(result))
 
 
-def test_probability_of_all_dealt_cards_are_black_in_joker():
+def test_probability_of_all_dealt_cards_are_red_in_joker():
     def fn():
         deck = JokerDeck()
         dealt_cards = deck.pick_random_cards(14)
