@@ -41,6 +41,9 @@ class Card:
             self.suit_symbol,
         )
 
+    def __hash__(self):
+        return hash((self.value, self.suit))
+
     def __repr__(self):
         return "{}".format(self.__str__())
 

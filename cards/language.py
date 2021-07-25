@@ -1,43 +1,36 @@
-from copy import copy
+from copy import copy, deepcopy
 
-from .exceptions import UnsupportedAction, UnsupportedCommand
+from .exceptions import UnsupportedAction, UnsupportedCommand, UnsupportedDeckType, BadSource
 from .models import EmptyDeck, StandardDeck, StandardDeckWithJokers, JokerDeck, Card
 
 
 class Language(object):
-    deck = None
     sequence_results = {}
     current_sequence = None
 
-    ACTIONS_AND_COMMANDS = {
-        "start_with": ["standard_deck", "standard_deck_with_jokers", "canasta_deck", "empty_deck"],
-        "shuffle": ["all_deck"],
-        "reset": [],
-        "pick": ["random_cards", "specific_cards"],
-        "insert": ["specific_picked_card", "random_picked_cards"],
-        "insert_force": ["specific_picked_card", "random_picked_cards", "specific_card", "random_card", "joker"],
-        "compare_picked": ["all_match", "any_match", "order_match"]  # ["specific_cards", "suits", "values", "colour",  "picture_card", "number_card"],
-    }
+    AVAILABLE_COMMANDS = [
+        "init_deck",
+        "pick_random_cards",
+        "pick_specific_cards",
+        "shuffle",
+        "insert_specific_cards",
+        "insert_random_cards",
+    ]
 
     def __init__(self, sequences):
         self.sequences = sequences
 
-    def execute_sequence(self, action, command, **kwargs):
-        if action not in self.ACTIONS_AND_COMMANDS.keys():
-            raise UnsupportedAction()
-
-        if command and command not in self.ACTIONS_AND_COMMANDS[action]:
+    def execute_sequence(self, command, **kwargs):
+        if command not in self.AVAILABLE_COMMANDS:
             raise UnsupportedCommand()
-
-        return getattr(self, 'action_' + action)(command, **kwargs)
+        return getattr(self, 'command_' + command)(**kwargs)
 
     def execute(self):
         self.current_sequence = 1
         self.sequence_results = {}
         for sequence in self.sequences:
             self.sequence_results[self.current_sequence] = self.execute_sequence(
-                action=sequence["action"],
-                command=sequence.get("command"),
+                command=sequence["command"],
                 **sequence.get('meta', {})
             )
             self.current_sequence += 1
@@ -113,16 +106,16 @@ class Language(object):
                         return False
             return True
 
-    def action_start_with(self, command):
-        if command == "standard_deck":
-            self.deck = StandardDeck()
-        elif command == "standard_deck_with_jokers":
-            self.deck = StandardDeckWithJokers()
-        elif command == "canasta_deck":
-            self.deck = JokerDeck()
-        elif command == "empty_deck":
-            self.deck = EmptyDeck()
-        return self.deck
+    def command_init_deck(self, deck_type):
+        if deck_type == "standard_deck":
+            return StandardDeck()
+        elif deck_type == "standard_deck_with_jokers":
+            return StandardDeckWithJokers()
+        elif deck_type == "canasta_deck":
+            return JokerDeck()
+        elif deck_type == "empty_deck":
+            return EmptyDeck()
+        raise UnsupportedDeckType(f"{deck_type} is not supported")
 
     def action_pick(self, command, count=1, specific_cards=None):
         if command == "random_cards":
@@ -132,3 +125,36 @@ class Language(object):
             for card in specific_cards or []:
                 picked_cards.append(self.deck.pick_card(card))
         return picked_cards
+
+    def _get_deck_for_picking(self, source):
+        if isinstance(source, list):
+            # We have a list not a deck, lets create a deck from `from_sequence`
+            # and then pick cards from it
+            deck = EmptyDeck()
+            for card in source:
+                deck.insert_card(card, force=True)
+        elif StandardDeck in type.mro(source.__class__):
+            deck = source
+        else:
+            raise BadSource("This sequence can't be used for picking card")
+        return deck
+
+    def command_pick_random_cards(self, count, from_sequence):
+        source = self.sequence_results[from_sequence]
+        deck = self._get_deck_for_picking(source)
+        return deck.pick_random_cards(count)
+
+    def command_pick_specific_cards(self, cards, from_sequence):
+        source = self.sequence_results[from_sequence]
+        deck = self._get_deck_for_picking(source)
+        picked_cards = []
+        for card in cards:
+            card = Card(value=card['value'], suit=card['suit'])
+            picked_cards.append(deck.pick_card(card))
+        return picked_cards
+
+    def command_shuffle(self, sequence):
+        source = self.sequence_results[sequence]
+        deck = self._get_deck_for_picking(source)
+        deck.shuffle()
+        return deck

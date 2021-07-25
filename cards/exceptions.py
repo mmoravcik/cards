@@ -18,5 +18,13 @@ class UnsupportedAction(Exception):
     pass
 
 
+class UnsupportedDeckType(Exception):
+    pass
+
+
 class UnsupportedCommand(Exception):
+    pass
+
+
+class BadSource(Exception):
     pass
