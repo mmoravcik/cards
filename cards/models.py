@@ -59,7 +59,7 @@ class StandardDeck(object):
         self.reset()
 
     @property
-    def is_full(self):
+    def is_full(self) -> bool:
         """
         Is this deck full?
         :return: <bool>
@@ -67,7 +67,7 @@ class StandardDeck(object):
         return len(self.cards) == self.NUMBER_OF_NON_JOKER_CARDS + self.NUMBER_OF_JOKERS
 
     @property
-    def is_over_filled(self):
+    def is_over_filled(self) -> bool:
         """
         Is this deck overfilled?
         :return: <bool>
@@ -75,11 +75,11 @@ class StandardDeck(object):
         return len(self.cards) > self.NUMBER_OF_NON_JOKER_CARDS + self.NUMBER_OF_JOKERS
 
     @property
-    def is_full_or_overfilled(self):
+    def is_full_or_overfilled(self) -> bool:
         return self.is_full or self.is_over_filled
 
     @property
-    def is_valid_deck(self):
+    def is_valid_deck(self) -> bool:
         """
         Standard deck has all cards.
         :return: <bool>
@@ -93,7 +93,7 @@ class StandardDeck(object):
                     return False
         return True
 
-    def card_occurrence_count(self, card):
+    def card_occurrence_count(self, card: Card) -> int:
         """
         How many times is this card in the deck?
         :param card: <Card>
@@ -105,7 +105,7 @@ class StandardDeck(object):
                 occurrences += 1
         return occurrences
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Reset the deck so it contains all cards in suit / value order
         """
@@ -118,13 +118,13 @@ class StandardDeck(object):
         for _ in range(0, self.NUMBER_OF_JOKERS):
             self.cards.append(Card(constants.JOKER_VALUE, constants.JOKER_SUIT))
 
-    def shuffle(self):
+    def shuffle(self) -> None:
         """
         Shuffle all cards in this deck
         """
         random.shuffle(self.cards)
 
-    def pick_random_card(self):
+    def pick_random_card(self) -> Card:
         """
         Pick a card from the deck, it will also removed it from self.cards
 
@@ -132,7 +132,7 @@ class StandardDeck(object):
         """
         return self.pick_random_cards(number_of_cards=1)[0]
 
-    def pick_random_cards(self, number_of_cards):
+    def pick_random_cards(self, number_of_cards: int) -> list[Card]:
         """
         Pick random cards from the deck, it will also removed it from self.cards
 
@@ -147,7 +147,7 @@ class StandardDeck(object):
             picked_cards.append(self.cards.pop(random.randrange(len(self.cards))))
         return picked_cards
 
-    def pick_card(self, card):
+    def pick_card(self, card: Card) -> Card:
         """
         Pick and remove specific card from the deck
         :param card: <Card>
@@ -160,7 +160,7 @@ class StandardDeck(object):
             if existing_card == card:
                 return self.cards.pop(idx)
 
-    def insert_card(self, card, force=False):
+    def insert_card(self, card: Card, force: bool = False) -> None:
         """
         Insert a card to a deck, but make sure it is not duplicated and deck
         is not full

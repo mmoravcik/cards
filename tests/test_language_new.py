@@ -1,19 +1,13 @@
 import pytest
 
 from ..cards.exceptions import UnsupportedDeckType, NotEnoughCardsException, CardIsNotInTheDeck
-from ..cards.constants import (
-    SUIT_HEARTS,
-    SUIT_DIAMONDS,
-    COLOUR_RED,
-    SUIT_CLUBS,
-    COLOUR_BLACK,
-)
 from ..cards.language import Language
-from ..cards.models import ProbabilityTest, StandardDeck, JokerDeck, Card
+from ..cards.models import StandardDeck, JokerDeck, Card
 
 ITERATION_COUNT = 15000
 
 pytestmark = pytest.mark.slow
+
 
 @pytest.fixture
 def standard_deck_sequence():

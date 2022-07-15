@@ -7,12 +7,12 @@ def test_probability_calculator():
     def test_func():
         return True
 
-    assert 100 == ProbabilityTest.run_probability_test(test_func, 5)
+    assert 100 == ProbabilityTest.run_probability_test(test_func, 2)
 
     def test_func():
         return False
 
-    assert 0 == ProbabilityTest.run_probability_test(test_func, 5)
+    assert 0 == ProbabilityTest.run_probability_test(test_func, 2)
 
     def test_func():
         return random.choice([1, 2]) == 2
@@ -26,9 +26,9 @@ def test_probability_calculator_with_arguments():
     def test_func(argument):
         return argument
 
-    assert 100 == ProbabilityTest.run_probability_test(test_func, 5, argument=True)
+    assert 100 == ProbabilityTest.run_probability_test(test_func, 2, argument=True)
 
     def test_func(argument):
         return argument
 
-    assert 0 == ProbabilityTest.run_probability_test(test_func, 5, argument=False)
+    assert 0 == ProbabilityTest.run_probability_test(test_func, 2, argument=False)
