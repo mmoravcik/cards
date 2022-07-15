@@ -1,8 +1,9 @@
 import random
+from collections import defaultdict
 
 import pytest
 
-from ..cards.constants import COLOUR_BLACK
+from ..cards.constants import COLOUR_BLACK, SUIT_SPADES, SUIT_HEARTS
 from ..cards.models import (
     StandardDeck,
     JokerDeck,
@@ -81,7 +82,7 @@ def test_probability_of_cutting_a_joker():
         deck.shuffle()
 
         assert len(deck.cards) == 108
-        # lets pick 3 random cards, and hope we got a joker!
+        # let's pick 3 random cards, and hope we got a joker!
         cards = deck.pick_random_cards(3)
 
         jokers = 0
@@ -273,3 +274,77 @@ def test_probability_of_picking_ace_of_hearths():
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 1.6 < result < 2.5
     print('Probability of picking an ACE OF HEARTHS is {}%'.format(result))
+
+
+def test_probability_of_picking_one_spade_and_one_heart():
+    def fn():
+        deck = StandardDeck()
+        dealt_cards = deck.pick_random_cards(2)
+        if (dealt_cards[0].suit == SUIT_SPADES and dealt_cards[1].suit == SUIT_HEARTS) or \
+                (dealt_cards[0].suit == SUIT_HEARTS and dealt_cards[1].suit == SUIT_SPADES):
+            return True
+
+    result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
+    assert 12 < result < 13.5  # real result 12.74%
+    print('Probability of picking one spade and one heart is {}%'.format(result))
+
+
+def test_probability_of_all_same_suit_and_redraw():
+    """
+    Charlie draws five cards out of a deck of 52. If he gets at least three
+    cards of one suit, he discards the cards not of that suit, and
+    draws as many cards as he discarded. What is the probability he
+    ends up with five cards of the same suit?
+
+    https://math.stackexchange.com/questions/1000513/harder-than-usual-deck-of-cards-probability-problem
+    """
+    def fn():
+        deck = StandardDeck()
+        dealt_cards = deck.pick_random_cards(5)
+        suit_count = defaultdict(int)
+        for card in dealt_cards:
+            suit_count[card.suit] += 1
+        try:
+            chosen_suit = [s for s in suit_count.items() if s[1] > 2][0]
+        except IndexError:
+            return False
+
+        number_of_card_to_draw = 5 - chosen_suit[1]
+        if number_of_card_to_draw == 0:
+            return True  # All cards have the same suit!
+        assert len(deck.cards) == 52 - 5
+        dealt_cards = deck.pick_random_cards(number_of_card_to_draw)
+        for card in dealt_cards:
+            if card.suit != chosen_suit[0]:
+                return False
+        return True
+
+    result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
+    assert 1.5 < result < 3.2  # real result is unknown
+    print('Probability of picking same suit is {}%'.format(result))
+
+
+def test_probability_of_three_of_a_kind():
+    """
+    You are playing a game of poker and you pull a three of a kind.
+    This means that out of the 5 cards in your hand, three are the same type
+    (Queen, Ace, 10, etc.) of different suits and the other two are
+     random cards from the deck. What is the probability of this hand occurring?
+    """
+    def fn():
+        deck = StandardDeck()
+        dealt_cards = deck.pick_random_cards(5)
+        value_count = defaultdict(int)
+        for card in dealt_cards:
+            value_count[card.value] += 1
+        for values in value_count.items():
+            if values[1] == 3:
+                return True
+        return False
+
+    result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
+    assert 1.6 < result < 2.6  # real result 2.11
+    print('Probability of picking 3 of a kind is {}%'.format(result))
+
+
+

@@ -12,7 +12,7 @@ from ..cards.models import ProbabilityTest
 
 ITERATION_COUNT = 15000
 
-pytestmark = pytest.mark.slow
+pytestmark = pytest.mark.skip("These are tests of the old language")
 
 
 def test_red_card_probability():
