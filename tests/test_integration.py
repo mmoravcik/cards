@@ -109,7 +109,7 @@ def test_exploding_kittens_dying_in_the_first_round():
 
     Jack of Hearths will be our Defuse and
     Queen of Hearts will be our Exploding Kitten
-    TODO make sure that the test is correct...and make sure it is using a right
+    # TODO: make sure that the test is correct...and make sure it is using a right
     amount of cards
     """
 
@@ -156,7 +156,7 @@ def test_exploding_kittens_dying_in_the_first_round():
 def test_probability_of_winning_a_price_in_3_card_problem():
     """
     What is the 3 'card' problem?
-    It is a adaptation of a Monty Hall problem:
+    It is an adaptation of a Monty Hall problem:
     '
     Suppose you're on a game show, and you're given the choice of three doors:
     Behind one door is a car; behind the others, goats.
@@ -210,6 +210,21 @@ def test_probability_of_all_dealt_cards_are_red_in_joker():
         dealt_cards = deck.pick_random_cards(14)
         for card in dealt_cards:
             if card.colour == COLOUR_BLACK:
+                return False
+        return True
+
+    result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
+    assert result < 0.5
+    print('Probability of all cards being red is {}%'.format(result))
+
+
+def test_probability_of_all_dealt_cards_are_same_colour_in_joker():
+    def fn():
+        deck = JokerDeck()
+        dealt_cards = deck.pick_random_cards(14)
+        desired_colour = dealt_cards[0].colour
+        for card in dealt_cards:
+            if card.colour == desired_colour:
                 return False
         return True
 
