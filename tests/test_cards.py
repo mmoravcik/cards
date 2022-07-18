@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..cards.models import Card
+from ..cards.models import Card, Joker
 from ..cards import constants
 
 
@@ -16,7 +16,7 @@ def test_card_colour():
     card = Card(1, constants.SUIT_DIAMONDS)
     assert card.colour == constants.COLOUR_RED
 
-    card = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
+    card = Joker()
     assert card.colour == '*'
 
 
@@ -33,7 +33,7 @@ def test_pretty_card():
     card = Card(1, constants.SUIT_DIAMONDS)
     assert str(card) == 'A♦'
 
-    card = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
+    card = Joker()
     assert str(card) == '**'
 
 
@@ -45,7 +45,7 @@ def test_is_the_same_card():
     card5 = Card(3, constants.SUIT_HEARTS)
     # The only card that actually matches card1
     card6 = Card(3, constants.SUIT_SPADES)
-    card7 = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
+    card7 = Joker()
 
     assert card1 != card2
     assert card1 != card3
@@ -55,6 +55,11 @@ def test_is_the_same_card():
     assert card1 != card7
 
 
-def test_joker_card():
-    card = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
+def test_joker_card_with_joker():
+    card = Joker()
+    assert card.is_joker
+
+
+def test_joker_card_with_joker_card():
+    card = Card(value=constants.JOKER_VALUE, suit=constants.JOKER_SUIT)
     assert card.is_joker

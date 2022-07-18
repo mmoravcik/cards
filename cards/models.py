@@ -1,6 +1,8 @@
 import random
 from dataclasses import dataclass
 
+from itertools import product
+
 from . import constants
 from . import exceptions
 
@@ -30,10 +32,9 @@ class Card:
 
     @property
     def is_joker(self):
-        return all([
-            self.value == constants.JOKER_VALUE,
-            self.suit == constants.JOKER_SUIT,
-        ])
+        return self == Joker() or (
+            self.suit == constants.JOKER_SUIT and self.value == constants.JOKER_VALUE
+        )
 
     def __str__(self):
         return "{}{}".format(
@@ -46,6 +47,12 @@ class Card:
 
     def __repr__(self):
         return "{}".format(self.__str__())
+
+
+@dataclass
+class Joker(Card):
+    value: str = constants.JOKER_VALUE
+    suit: str = constants.JOKER_SUIT
 
 
 class StandardDeck(object):
@@ -87,10 +94,13 @@ class StandardDeck(object):
         if not self.is_full:
             return False
 
-        for suit in constants.CARD_SUITS_CONF.keys():
-            for value in constants.CARD_VALUES_CONF.keys():
-                if self.card_occurrence_count(Card(value, suit)) != self.EACH_NON_JOKER_CARD_OCCURS:
-                    return False
+        for p in product(
+            constants.CARD_SUITS_CONF.keys(),
+            constants.CARD_VALUES_CONF.keys(),
+        ):
+            card = Card(suit=p[0], value=p[1])
+            if self.card_occurrence_count(card) != self.EACH_NON_JOKER_CARD_OCCURS:
+                return False
         return True
 
     def card_occurrence_count(self, card: Card) -> int:
@@ -99,11 +109,7 @@ class StandardDeck(object):
         :param card: <Card>
         :return: <int> number of occurrences
         """
-        occurrences = 0
-        for existing_card in self.cards:
-            if existing_card == card:
-                occurrences += 1
-        return occurrences
+        return self.cards.count(card)
 
     def reset(self) -> None:
         """
@@ -111,12 +117,14 @@ class StandardDeck(object):
         """
         self.cards = []
         for _ in range(0, self.EACH_NON_JOKER_CARD_OCCURS):
-            for suit in constants.CARD_SUITS_CONF.keys():
-                for value in constants.CARD_VALUES_CONF.keys():
-                    self.cards.append(Card(value, suit))
+            for p in product(
+                constants.CARD_SUITS_CONF.keys(),
+                constants.CARD_VALUES_CONF.keys(),
+            ):
+                self.cards.append(Card(value=p[1], suit=p[0]))
 
         for _ in range(0, self.NUMBER_OF_JOKERS):
-            self.cards.append(Card(constants.JOKER_VALUE, constants.JOKER_SUIT))
+            self.cards.append(Joker())
 
     def shuffle(self) -> None:
         """

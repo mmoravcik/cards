@@ -9,7 +9,7 @@ from ..cards.models import (
     JokerDeck,
     Card,
     EmptyDeck,
-    ProbabilityTest,
+    ProbabilityTest, Joker,
 )
 from ..cards import constants
 
@@ -150,7 +150,7 @@ def test_exploding_kittens_dying_in_the_first_round():
                 return True
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
-    assert 0.2 < result < 0.45
+    assert 0.2 < result < 0.5
     print('Probability of dying in the first round of Exploding kittens is {}%'.format(result))
 
 
@@ -172,7 +172,7 @@ def test_probability_of_winning_a_price_in_3_card_problem():
 
     def fn():
         deck = EmptyDeck()
-        joker = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
+        joker = Joker()
         goat = Card(12, constants.SUIT_HEARTS)
         deck.insert_card(joker, force=True)
         deck.insert_card(goat, force=True)
@@ -201,7 +201,7 @@ def test_probability_of_winning_a_price_in_3_card_problem():
         return chosen_card.is_joker
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
-    assert 64 < result < 67
+    assert 64 < result < 68
     print('Probability picking the winning card is {}%'.format(result))
 
 
@@ -259,7 +259,7 @@ def test_probability_of_straight_in_5_card_poker():
         return True
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
-    assert 0.2 < result < 0.4
+    assert 0.1 < result < 0.5
     print('Probability of a straight in poker {}%'.format(result))
 
 

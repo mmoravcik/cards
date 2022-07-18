@@ -1,6 +1,6 @@
 import pytest
 
-from ..cards.models import StandardDeck, Card, StandardDeckWithJokers
+from ..cards.models import StandardDeck, Card, StandardDeckWithJokers, Joker
 
 from ..cards import constants
 from ..cards import exceptions
@@ -163,30 +163,29 @@ def test_insert_existing_card():
 
 def test_insert_existing_card_joker_deck():
     deck = StandardDeckWithJokers()
-    joker = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
     # Pick 1 joker
-    deck.pick_card(joker)
+    deck.pick_card(Joker())
 
     assert len(deck.cards) == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS + \
         StandardDeckWithJokers.NUMBER_OF_JOKERS - 1
     # 1 Joker is still in pack
-    assert 1 == deck.card_occurrence_count(joker)
+    assert 1 == deck.card_occurrence_count(Joker())
 
     # Lets try to insert the joker 2 times, it should not work, unless forced
     # First one is OK
-    deck.insert_card(joker, force=False)
+    deck.insert_card(Joker(), force=False)
     assert len(deck.cards) == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS + \
         StandardDeckWithJokers.NUMBER_OF_JOKERS
-    assert 2 == deck.card_occurrence_count(joker)
+    assert 2 == deck.card_occurrence_count(Joker())
 
     # Second raises a deck full exception
     with pytest.raises(exceptions.DeckFullException):
-        deck.insert_card(joker, force=False)
+        deck.insert_card(Joker(), force=False)
 
-    deck.insert_card(joker, force=True)
+    deck.insert_card(Joker(), force=True)
     assert len(deck.cards) == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS + \
         StandardDeckWithJokers.NUMBER_OF_JOKERS + 1
-    assert 3 == deck.card_occurrence_count(joker)
+    assert 3 == deck.card_occurrence_count(Joker())
     # StandardDeck is not valid as it has the same card twice
     assert not deck.is_valid_deck
 
@@ -215,11 +214,10 @@ def test_is_valid_deck_with_jokers():
     deck.insert_card(picked_card)
     assert deck.is_valid_deck
 
-    joker = Card(constants.JOKER_VALUE, constants.JOKER_SUIT)
-    deck.pick_card(joker)
+    deck.pick_card(Joker())
     assert not deck.is_valid_deck
 
-    deck.insert_card(joker)
+    deck.insert_card(Joker())
     assert deck.is_valid_deck
 
     deck.insert_card(picked_card, force=True)
