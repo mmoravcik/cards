@@ -1,7 +1,12 @@
 from copy import copy, deepcopy
 from typing import Union, Iterable
 
-from .exceptions import UnsupportedAction, UnsupportedCommand, UnsupportedDeckType, BadSource
+from .exceptions import (
+    UnsupportedAction,
+    UnsupportedCommand,
+    UnsupportedDeckType,
+    BadSource,
+)
 from .models import EmptyDeck, StandardDeck, StandardDeckWithJokers, JokerDeck, Card
 
 
@@ -24,15 +29,14 @@ class Language(object):
     def execute_sequence(self, command: AVAILABLE_COMMANDS, **kwargs):
         if command not in self.AVAILABLE_COMMANDS:
             raise UnsupportedCommand()
-        return getattr(self, 'command_' + command)(**kwargs)
+        return getattr(self, "command_" + command)(**kwargs)
 
     def execute(self):
         self.current_sequence = 1
         self.sequence_results = {}
         for sequence in self.sequences:
             self.sequence_results[self.current_sequence] = self.execute_sequence(
-                command=sequence["command"],
-                **sequence.get('meta', {})
+                command=sequence["command"], **sequence.get("meta", {})
             )
             self.current_sequence += 1
         return self.sequence_results
@@ -141,7 +145,7 @@ class Language(object):
         deck = self._get_deck_for_picking(source)
         picked_cards = []
         for card in cards:
-            card = Card(value=card['value'], suit=card['suit'])
+            card = Card(value=card["value"], suit=card["suit"])
             picked_cards.append(deck.pick_card(card))
         return picked_cards
 

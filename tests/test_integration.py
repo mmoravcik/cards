@@ -9,7 +9,8 @@ from ..cards.models import (
     JokerDeck,
     Card,
     EmptyDeck,
-    ProbabilityTest, Joker,
+    ProbabilityTest,
+    Joker,
 )
 from ..cards import constants
 
@@ -31,7 +32,7 @@ def test_high_card_is_selected():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 91 < result < 93
-    print('High card has been picked in {}% cases'.format(result))
+    print("High card has been picked in {}% cases".format(result))
 
 
 def test_same_card_is_turned_face_up():
@@ -39,6 +40,7 @@ def test_same_card_is_turned_face_up():
     You have two decks and you turn a card from both at once.
     What is the probability that it will be the same card at least once?
     """
+
     def fn():
         deck1 = StandardDeck()
         deck2 = StandardDeck()
@@ -52,7 +54,7 @@ def test_same_card_is_turned_face_up():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 62 < result < 64.5
-    print('Same card has been discovered in {}% cases'.format(result))
+    print("Same card has been discovered in {}% cases".format(result))
 
 
 def test_pick_red_card():
@@ -69,7 +71,7 @@ def test_pick_red_card():
     # We expect this to be close to 50%
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 49 < result < 51
-    print('Chance of a red card is {}%'.format(result))
+    print("Chance of a red card is {}%".format(result))
 
 
 def test_probability_of_cutting_a_joker():
@@ -92,14 +94,16 @@ def test_probability_of_cutting_a_joker():
         return jokers >= how_many_jokers_do_i_want
 
     result = ProbabilityTest.run_probability_test(
-        fn, iteration_count=ITERATION_COUNT, how_many_jokers_do_i_want=1)
+        fn, iteration_count=ITERATION_COUNT, how_many_jokers_do_i_want=1
+    )
     assert 10 < result < 12
-    print('Probability of getting at least 1 joker is {}%'.format(result))
+    print("Probability of getting at least 1 joker is {}%".format(result))
 
     result = ProbabilityTest.run_probability_test(
-        fn, iteration_count=ITERATION_COUNT, how_many_jokers_do_i_want=2)
+        fn, iteration_count=ITERATION_COUNT, how_many_jokers_do_i_want=2
+    )
     assert 0 < result < 0.8
-    print('Probability of getting at least 2 jokers is {}%'.format(result))
+    print("Probability of getting at least 2 jokers is {}%".format(result))
 
 
 def test_exploding_kittens_dying_in_the_first_round():
@@ -151,7 +155,11 @@ def test_exploding_kittens_dying_in_the_first_round():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 0.2 < result < 0.5
-    print('Probability of dying in the first round of Exploding kittens is {}%'.format(result))
+    print(
+        "Probability of dying in the first round of Exploding kittens is {}%".format(
+            result
+        )
+    )
 
 
 def test_probability_of_winning_a_price_in_3_card_problem():
@@ -202,7 +210,7 @@ def test_probability_of_winning_a_price_in_3_card_problem():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 64 < result < 68
-    print('Probability picking the winning card is {}%'.format(result))
+    print("Probability picking the winning card is {}%".format(result))
 
 
 def test_probability_of_all_dealt_cards_are_red_in_joker():
@@ -216,7 +224,7 @@ def test_probability_of_all_dealt_cards_are_red_in_joker():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert result < 0.5
-    print('Probability of all cards being red is {}%'.format(result))
+    print("Probability of all cards being red is {}%".format(result))
 
 
 def test_probability_of_all_dealt_cards_are_same_colour_in_joker():
@@ -231,7 +239,7 @@ def test_probability_of_all_dealt_cards_are_same_colour_in_joker():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert result < 0.5
-    print('Probability of all cards being red is {}%'.format(result))
+    print("Probability of all cards being red is {}%".format(result))
 
 
 def test_probability_of_flush_in_5_card_poker():
@@ -246,7 +254,7 @@ def test_probability_of_flush_in_5_card_poker():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert result < 0.5
-    print('Probability of a flush in 5 card poker {}%'.format(result))
+    print("Probability of a flush in 5 card poker {}%".format(result))
 
 
 def test_probability_of_straight_in_5_card_poker():
@@ -260,7 +268,7 @@ def test_probability_of_straight_in_5_card_poker():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 0.1 < result < 0.5
-    print('Probability of a straight in poker {}%'.format(result))
+    print("Probability of a straight in poker {}%".format(result))
 
 
 def test_probability_of_picking_ace_of_hearths():
@@ -273,20 +281,23 @@ def test_probability_of_picking_ace_of_hearths():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 1.6 < result < 2.5
-    print('Probability of picking an ACE OF HEARTHS is {}%'.format(result))
+    print("Probability of picking an ACE OF HEARTHS is {}%".format(result))
 
 
 def test_probability_of_picking_one_spade_and_one_heart():
     def fn():
         deck = StandardDeck()
         dealt_cards = deck.pick_random_cards(2)
-        if (dealt_cards[0].suit == SUIT_SPADES and dealt_cards[1].suit == SUIT_HEARTS) or \
-                (dealt_cards[0].suit == SUIT_HEARTS and dealt_cards[1].suit == SUIT_SPADES):
+        if (
+            dealt_cards[0].suit == SUIT_SPADES and dealt_cards[1].suit == SUIT_HEARTS
+        ) or (
+            dealt_cards[0].suit == SUIT_HEARTS and dealt_cards[1].suit == SUIT_SPADES
+        ):
             return True
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 12 < result < 13.5  # real result 12.74%
-    print('Probability of picking one spade and one heart is {}%'.format(result))
+    print("Probability of picking one spade and one heart is {}%".format(result))
 
 
 def test_probability_of_all_same_suit_and_redraw():
@@ -298,6 +309,7 @@ def test_probability_of_all_same_suit_and_redraw():
 
     https://math.stackexchange.com/questions/1000513/harder-than-usual-deck-of-cards-probability-problem
     """
+
     def fn():
         deck = StandardDeck()
         dealt_cards = deck.pick_random_cards(5)
@@ -321,7 +333,7 @@ def test_probability_of_all_same_suit_and_redraw():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 1.5 < result < 3.2  # real result is unknown
-    print('Probability of picking same suit is {}%'.format(result))
+    print("Probability of picking same suit is {}%".format(result))
 
 
 def test_probability_of_three_of_a_kind():
@@ -331,6 +343,7 @@ def test_probability_of_three_of_a_kind():
     (Queen, Ace, 10, etc.) of different suits and the other two are
      random cards from the deck. What is the probability of this hand occurring?
     """
+
     def fn():
         deck = StandardDeck()
         dealt_cards = deck.pick_random_cards(5)
@@ -344,7 +357,4 @@ def test_probability_of_three_of_a_kind():
 
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 1.6 < result < 2.6  # real result 2.11
-    print('Probability of picking 3 of a kind is {}%'.format(result))
-
-
-
+    print("Probability of picking 3 of a kind is {}%".format(result))

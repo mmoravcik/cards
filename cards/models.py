@@ -15,20 +15,20 @@ class Card:
     @property
     def colour(self):
         if self.is_joker:
-            return '*'
-        return constants.CARD_SUITS_CONF[self.suit]['colour']
+            return "*"
+        return constants.CARD_SUITS_CONF[self.suit]["colour"]
 
     @property
     def suit_symbol(self):
         if self.is_joker:
-            return '*'
-        return constants.CARD_SUITS_CONF[self.suit]['symbol']
+            return "*"
+        return constants.CARD_SUITS_CONF[self.suit]["symbol"]
 
     @property
     def value_symbol(self):
         if self.is_joker:
-            return '*'
-        return constants.CARD_VALUES_CONF[self.value]['symbol']
+            return "*"
+        return constants.CARD_VALUES_CONF[self.value]["symbol"]
 
     @property
     def is_joker(self):
@@ -181,10 +181,13 @@ class StandardDeck(object):
 
         if not force:
             occurrences = self.card_occurrence_count(card)
-            if any([
-                card.is_joker and occurrences > self.NUMBER_OF_JOKERS - 1,
-                not card.is_joker and occurrences > self.EACH_NON_JOKER_CARD_OCCURS - 1,
-            ]):
+            if any(
+                [
+                    card.is_joker and occurrences > self.NUMBER_OF_JOKERS - 1,
+                    not card.is_joker
+                    and occurrences > self.EACH_NON_JOKER_CARD_OCCURS - 1,
+                ]
+            ):
                 raise exceptions.IncorrectDeckException(
                     "Card `{}` is already in the deck {} time(s)".format(
                         str(card), occurrences
@@ -205,7 +208,9 @@ class ProbabilityTest(object):
         return (float(success_count) / float(iterations)) * 100
 
     @staticmethod
-    def run_language_probability_test(test_func, result_sequence, iteration_count=20000, **kwargs):
+    def run_language_probability_test(
+        test_func, result_sequence, iteration_count=20000, **kwargs
+    ):
         """
         Run test_func over `iteration_count` times and return the probability
         in percent of the event happening
@@ -275,18 +280,20 @@ class StandardDeckWithJokers(StandardDeck):
 
 
 class JokerDeck(StandardDeck):
-    """"
+    """
     Joker deck is a regular deck included twice.
     """
+
     NUMBER_OF_NON_JOKER_CARDS = 104
     EACH_NON_JOKER_CARD_OCCURS = 2
     NUMBER_OF_JOKERS = 4
 
 
 class EmptyDeck(StandardDeck):
-    """"
+    """
     Deck with no cards
     """
+
     NUMBER_OF_NON_JOKER_CARDS = 0
     EACH_NON_JOKER_CARD_OCCURS = 0
     NUMBER_OF_JOKERS = 0

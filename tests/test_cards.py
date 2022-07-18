@@ -17,24 +17,24 @@ def test_card_colour():
     assert card.colour == constants.COLOUR_RED
 
     card = Joker()
-    assert card.colour == '*'
+    assert card.colour == "*"
 
 
 def test_pretty_card():
     card = Card(3, constants.SUIT_SPADES)
-    assert str(card) == '3♠'
+    assert str(card) == "3♠"
 
     card = Card(10, constants.SUIT_CLUBS)
-    assert str(card) == '10♣'
+    assert str(card) == "10♣"
 
     card = Card(13, constants.SUIT_HEARTS)
-    assert str(card) == 'K♥'
+    assert str(card) == "K♥"
 
     card = Card(1, constants.SUIT_DIAMONDS)
-    assert str(card) == 'A♦'
+    assert str(card) == "A♦"
 
     card = Joker()
-    assert str(card) == '**'
+    assert str(card) == "**"
 
 
 def test_is_the_same_card():

@@ -12,14 +12,22 @@ def test_shuffle_deck():
 
     sample_size = 10
 
-    assert StandardDeck.NUMBER_OF_NON_JOKER_CARDS == len(another_deck.cards) == len(deck.cards)
+    assert (
+        StandardDeck.NUMBER_OF_NON_JOKER_CARDS
+        == len(another_deck.cards)
+        == len(deck.cards)
+    )
     for i in range(0, sample_size):
         assert str(deck.cards[i]) == str(another_deck.cards[i])
 
     another_deck.shuffle()
     assert len(another_deck.cards) == StandardDeck.NUMBER_OF_NON_JOKER_CARDS
 
-    assert StandardDeck.NUMBER_OF_NON_JOKER_CARDS == len(deck.cards) == len(another_deck.cards)
+    assert (
+        StandardDeck.NUMBER_OF_NON_JOKER_CARDS
+        == len(deck.cards)
+        == len(another_deck.cards)
+    )
 
     matching_cards = 0
     for i in range(0, sample_size):
@@ -166,16 +174,23 @@ def test_insert_existing_card_joker_deck():
     # Pick 1 joker
     deck.pick_card(Joker())
 
-    assert len(deck.cards) == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS + \
-        StandardDeckWithJokers.NUMBER_OF_JOKERS - 1
+    assert (
+        len(deck.cards)
+        == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS
+        + StandardDeckWithJokers.NUMBER_OF_JOKERS
+        - 1
+    )
     # 1 Joker is still in pack
     assert 1 == deck.card_occurrence_count(Joker())
 
     # Lets try to insert the joker 2 times, it should not work, unless forced
     # First one is OK
     deck.insert_card(Joker(), force=False)
-    assert len(deck.cards) == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS + \
-        StandardDeckWithJokers.NUMBER_OF_JOKERS
+    assert (
+        len(deck.cards)
+        == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS
+        + StandardDeckWithJokers.NUMBER_OF_JOKERS
+    )
     assert 2 == deck.card_occurrence_count(Joker())
 
     # Second raises a deck full exception
@@ -183,8 +198,12 @@ def test_insert_existing_card_joker_deck():
         deck.insert_card(Joker(), force=False)
 
     deck.insert_card(Joker(), force=True)
-    assert len(deck.cards) == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS + \
-        StandardDeckWithJokers.NUMBER_OF_JOKERS + 1
+    assert (
+        len(deck.cards)
+        == StandardDeckWithJokers.NUMBER_OF_NON_JOKER_CARDS
+        + StandardDeckWithJokers.NUMBER_OF_JOKERS
+        + 1
+    )
     assert 3 == deck.card_occurrence_count(Joker())
     # StandardDeck is not valid as it has the same card twice
     assert not deck.is_valid_deck
@@ -222,4 +241,3 @@ def test_is_valid_deck_with_jokers():
 
     deck.insert_card(picked_card, force=True)
     assert not deck.is_valid_deck
-
