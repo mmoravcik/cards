@@ -23,12 +23,7 @@ def test_red_card_probability():
             "action": "compare_picked",
             "command": "any_match",
             "meta": {
-                "conditions": [
-                    {
-                        "type": "colours",
-                        "values": [COLOUR_RED],
-                    }
-                ],
+                "conditions": [{"type": "colours", "values": [COLOUR_RED],}],
                 "from_sequence": 2,
             },
         },
@@ -36,9 +31,7 @@ def test_red_card_probability():
 
     lan = Language(sequences=red_card_probability)
     result = ProbabilityTest.run_language_probability_test(
-        lan.execute,
-        iteration_count=ITERATION_COUNT,
-        result_sequence=3,
+        lan.execute, iteration_count=ITERATION_COUNT, result_sequence=3,
     )
     assert 49 < result < 51
     print("Chance of a red card is {}%".format(result))
@@ -56,10 +49,7 @@ def test_high_card_probability():
             "command": "any_match",
             "meta": {
                 "conditions": [
-                    {
-                        "type": "values",
-                        "values": [1, 13, 12, 11, 10],  # Ace is 1
-                    }
+                    {"type": "values", "values": [1, 13, 12, 11, 10],}  # Ace is 1
                 ],
                 "matches_required": 1,
             },
@@ -85,12 +75,7 @@ def test_cutting_a_joker_probability():
             "action": "compare_picked",
             "command": "any_match",
             "meta": {
-                "conditions": [
-                    {
-                        "type": "values",
-                        "values": ["*"],  # joker
-                    }
-                ],
+                "conditions": [{"type": "values", "values": ["*"],}],  # joker
                 "matches_required": 1,
             },
         },
@@ -243,9 +228,7 @@ def test_picking_3_suits_in_specific_order():
         {
             "action": "compare_picked",
             "command": "order_match",
-            "meta": {
-                "suits": [SUIT_HEARTS, SUIT_DIAMONDS, SUIT_CLUBS],
-            },
+            "meta": {"suits": [SUIT_HEARTS, SUIT_DIAMONDS, SUIT_CLUBS],},
         },
     ]
 
