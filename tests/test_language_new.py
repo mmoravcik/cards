@@ -15,24 +15,13 @@ pytestmark = pytest.mark.slow
 
 @pytest.fixture
 def standard_deck_sequence():
-    return [
-        {
-            "command": "init_deck",
-            "meta": {"deck_type": "standard_deck"},
-        }
-    ]
+    return [{"command": "init_deck", "meta": {"deck_type": "standard_deck"},}]
 
 
 def test_init_known_deck():
     sequences = [
-        {
-            "command": "init_deck",
-            "meta": {"deck_type": "standard_deck"},
-        },
-        {
-            "command": "init_deck",
-            "meta": {"deck_type": "canasta_deck"},
-        },
+        {"command": "init_deck", "meta": {"deck_type": "standard_deck"},},
+        {"command": "init_deck", "meta": {"deck_type": "canasta_deck"},},
     ]
     lan = Language(sequences=sequences)
     lan.execute()
@@ -200,7 +189,7 @@ def test_pick_unknown_specific_cards_from_sequence(standard_deck_sequence):
                     {
                         "value": 4,
                         "suit": "hearts",
-                    },  # this card doesn't exists in seq #2
+                    },  # this card doesn't exist in seq #2
                     {"value": 3, "suit": "spades"},
                 ],
                 "from_sequence": 2,

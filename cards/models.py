@@ -37,10 +37,7 @@ class Card:
         )
 
     def __str__(self):
-        return "{}{}".format(
-            self.value_symbol,
-            self.suit_symbol,
-        )
+        return "{}{}".format(self.value_symbol, self.suit_symbol,)
 
     def __hash__(self):
         return hash((self.value, self.suit))
@@ -95,8 +92,7 @@ class StandardDeck(object):
             return False
 
         for p in product(
-            constants.CARD_SUITS_CONF.keys(),
-            constants.CARD_VALUES_CONF.keys(),
+            constants.CARD_SUITS_CONF.keys(), constants.CARD_VALUES_CONF.keys(),
         ):
             card = Card(suit=p[0], value=p[1])
             if self.card_occurrence_count(card) != self.EACH_NON_JOKER_CARD_OCCURS:
@@ -118,8 +114,7 @@ class StandardDeck(object):
         self.cards = []
         for _ in range(0, self.EACH_NON_JOKER_CARD_OCCURS):
             for p in product(
-                constants.CARD_SUITS_CONF.keys(),
-                constants.CARD_VALUES_CONF.keys(),
+                constants.CARD_SUITS_CONF.keys(), constants.CARD_VALUES_CONF.keys(),
             ):
                 self.cards.append(Card(value=p[1], suit=p[0]))
 

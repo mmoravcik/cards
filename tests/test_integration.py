@@ -358,3 +358,27 @@ def test_probability_of_three_of_a_kind():
     result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
     assert 1.6 < result < 2.6  # real result 2.11
     print("Probability of picking 3 of a kind is {}%".format(result))
+
+
+def test_probability_that_first_three_cards_of_shuffled_deck_are_the_same():
+    def fn():
+        deck = StandardDeck()
+        deck.shuffle()
+        first_card = deck.cards[0]
+        second_card = deck.cards[1]
+        third_card = deck.cards[2]
+        deck.shuffle()
+        first_card_2 = deck.cards[0]
+        second_card_2 = deck.cards[1]
+        third_card_2 = deck.cards[2]
+        return (
+            first_card == first_card_2
+            and second_card == second_card_2
+            and third_card == third_card_2
+        )
+
+    result = ProbabilityTest.run_probability_test(fn, iteration_count=ITERATION_COUNT)
+    assert result < 0.1
+    print(
+        "Probability of picking 3 cards being the same after shuffle {}%".format(result)
+    )
