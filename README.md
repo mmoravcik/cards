@@ -1,7 +1,7 @@
 # Cards
 
 ## Installation
-1. create and activate new python 3.x environment
+1. create and activate new python >=3.9 environment
 2. `pip install -r requirements.txt`
 3. run `pre-commit install` to add pre-commit hooks
 
